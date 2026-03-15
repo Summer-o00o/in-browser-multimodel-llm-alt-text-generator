@@ -19,12 +19,25 @@ let model: Awaited<ReturnType<typeof AutoModelForImageTextToText.from_pretrained
 let loadPromise: Promise<void> | null = null;
 let activeBackend: RuntimeBackend = 'unknown';
 
+interface NavigatorWithGpu extends Navigator {
+  gpu: {
+    requestAdapter(options?: {
+      powerPreference?: 'low-power' | 'high-performance';
+      forceFallbackAdapter?: boolean;
+    }): Promise<unknown>;
+  };
+}
+
 function isExecutionBackend(backend: RuntimeBackend): backend is 'webgpu' | 'wasm' {
   return backend === 'webgpu' || backend === 'wasm';
 }
 
 function hasWebGpu(): boolean {
   return typeof navigator !== 'undefined' && 'gpu' in navigator;
+}
+
+function isSecureBrowserContext(): boolean {
+  return typeof window !== 'undefined' && window.isSecureContext;
 }
 
 function isLikelyMobileDevice(): boolean {
@@ -123,19 +136,50 @@ export async function canRun(): Promise<RuntimeAvailability> {
     };
   }
 
-  if (hasWebGpu()) {
+  if (!isSecureBrowserContext()) {
+    return {
+      supported: true,
+      backend: 'wasm',
+      reason: 'WebGPU is unavailable because this page is not running in a secure browser context. Use HTTPS or localhost.',
+    };
+  }
+
+  if (!hasWebGpu()) {
+    return {
+      supported: true,
+      backend: 'wasm',
+      reason: 'WebGPU is not exposed in this browser context, so the app will use the slower WASM fallback.',
+    };
+  }
+
+  try {
+    const gpuNavigator = navigator as NavigatorWithGpu;
+    const adapter = await gpuNavigator.gpu.requestAdapter({
+      powerPreference: 'high-performance',
+    });
+
+    if (!adapter) {
+      return {
+        supported: true,
+        backend: 'wasm',
+        reason: 'WebGPU was detected, but the browser did not provide a GPU adapter for this page. The app will use the slower WASM fallback.',
+      };
+    }
+
     return {
       supported: true,
       backend: 'webgpu',
       reason: 'WebGPU detected. This is the preferred backend for the alt-text generator.',
     };
-  }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown WebGPU adapter error.';
 
-  return {
-    supported: true,
-    backend: 'wasm',
-    reason: 'WebGPU was not detected. The app will attempt a slower WASM fallback.',
-  };
+    return {
+      supported: true,
+      backend: 'wasm',
+      reason: `WebGPU was detected, but adapter initialization failed (${message}). The app will use the slower WASM fallback.`,
+    };
+  }
 }
 
 export async function loadModel(): Promise<void> {

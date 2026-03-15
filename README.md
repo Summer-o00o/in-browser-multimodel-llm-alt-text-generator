@@ -57,6 +57,7 @@ npm run dev -- --host
 - `WebGPU` is preferred for reasonable performance.
 - If `WebGPU` is unavailable, the app attempts a `WASM` fallback, which may be slow.
 - Mobile Safari and Chrome are intentionally blocked because the local model load is likely to crash or be killed by memory limits.
+- The deployed GitHub Pages build can still fall back to `WASM` if the browser does not expose `navigator.gpu`, the page is not treated as a secure context, or `navigator.gpu.requestAdapter()` fails on that origin.
 
 ## Alt Text Guidance
 
