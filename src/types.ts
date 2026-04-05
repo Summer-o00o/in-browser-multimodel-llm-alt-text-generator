@@ -34,6 +34,6 @@ export interface ImageQuestionInput {
 
 export interface ImageQuestionResult {
   text: string;
-  backend: string;
+  backend: RuntimeBackend;
   steps: GenerationTraceStep[];
 }
