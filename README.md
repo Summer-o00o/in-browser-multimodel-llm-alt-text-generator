@@ -60,6 +60,8 @@ npm run dev -- --host
 
 - Desktop browsers are the target environment.
 - `WebGPU` is preferred for reasonable performance.
+- First load can take a while because the models have to download and initialize in the browser.
+- On slower machines, memory-constrained browsers, or weaker GPU/browser combinations, the tab may become unresponsive or crash while the models load or run.
 - If `WebGPU` is unavailable, the app attempts a `WASM` fallback, which may be slow.
 - The text rewrite model is loaded lazily after the vision model so the app keeps the current flow and only adds the second stage when needed for generation.
 - Mobile Safari and Chrome are intentionally blocked because the local model load is likely to crash or be killed by memory limits.
@@ -107,5 +109,6 @@ public/
 ## Limitations
 
 - The app depends on client-side model downloads, so first load can take time.
+- Heavy local inference can still freeze or crash a browser tab on some machines even on desktop.
 - Browser support and performance depend heavily on `WebGPU`.
 - This is a local browser demo, not a production-grade accessibility audit tool.

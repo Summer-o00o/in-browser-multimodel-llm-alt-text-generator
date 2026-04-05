@@ -24,6 +24,12 @@ const TRACE_EXPLAINER = [
   `The loop stops as soon as a rewrite fits within ${ALT_TEXT_CHARACTER_LIMIT} characters, or fails after ${MAX_REWRITE_LOOPS} passes.`,
 ].join('\n');
 
+const RUNTIME_WARNING = [
+  'Local browser inference can take a while, especially on the first run while models download and initialize.',
+  'On slower machines or browsers without stable WebGPU support, the tab may become unresponsive or crash during loading or generation.',
+  'Desktop with WebGPU is strongly recommended.',
+].join('\n\n');
+
 interface ViewState {
   appState: AppState;
   image: File | null;
@@ -149,6 +155,13 @@ export function mountApp(root: HTMLDivElement): void {
             <span class="hint">PNG, JPEG, WebP, GIF. Max 10 MB.</span>
           </label>
 
+          <button id="run-button" class="run-button" type="button">Generate alt text</button>
+
+          <section class="warning-card">
+            <span class="warning-label">Before you run</span>
+            <pre class="warning-body">${RUNTIME_WARNING}</pre>
+          </section>
+
           <section class="field">
             <span class="label">Flow</span>
             <pre class="prompt-display">${ALT_TEXT_STRATEGY}</pre>
@@ -163,8 +176,6 @@ export function mountApp(root: HTMLDivElement): void {
             <span class="label">Rewrite loop</span>
             <pre class="prompt-display">${TRACE_EXPLAINER}</pre>
           </section>
-
-          <button id="run-button" class="run-button" type="button">Generate alt text</button>
         </div>
 
         <div class="column output">
