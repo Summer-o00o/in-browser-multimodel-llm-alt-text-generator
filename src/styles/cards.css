@@ -1,0 +1,254 @@
+.preview-card {
+  display: grid;
+  gap: 10px;
+}
+
+.preview-frame {
+  position: relative;
+}
+
+.status-card,
+.result-card,
+.trace-card,
+.error-card,
+.preview-empty {
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--panel-strong);
+}
+
+.status-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 18px;
+}
+
+.status-value {
+  margin: 6px 0 0;
+  font-size: 1rem;
+}
+
+.progress-track {
+  width: min(320px, 100%);
+  height: 8px;
+  margin-top: 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f3c560 0%, #f38b31 60%, #ef6a39 100%);
+  box-shadow: 0 0 24px rgba(243, 139, 49, 0.45);
+  transition: width 220ms ease;
+}
+
+.backend-badge {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.backend-badge[data-backend='webgpu'] {
+  background: rgba(125, 207, 149, 0.16);
+  color: var(--success);
+}
+
+.backend-badge[data-backend='wasm'] {
+  background: var(--accent-soft);
+  color: #f4c38f;
+}
+
+.preview-empty,
+.preview-image {
+  min-height: 280px;
+}
+
+.preview-empty {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: var(--text-muted);
+}
+
+.preview-image {
+  width: 100%;
+  object-fit: contain;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(8, 10, 15, 0.9);
+  padding: 12px;
+}
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 24px;
+  border-radius: 20px;
+  background: rgba(10, 12, 18, 0.72);
+  color: #f8f5ed;
+  text-align: center;
+  backdrop-filter: blur(6px);
+}
+
+.loading-spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+
+.result-card,
+.trace-card,
+.error-card {
+  padding: 18px;
+}
+
+.result-meta {
+  margin: 10px 0 0;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+.result-body {
+  margin: 12px 0 0;
+  white-space: pre-wrap;
+  font-family: 'IBM Plex Mono', 'SFMono-Regular', monospace;
+  font-size: 0.95rem;
+  color: #f3f1ec;
+}
+
+.trace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 18px;
+}
+
+.trace-explainer {
+  margin: 10px 0 0;
+  max-width: 62ch;
+  color: var(--text-muted);
+  font-size: 0.94rem;
+}
+
+.trace-summary {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.trace-list {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.trace-empty,
+.trace-step {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 10, 15, 0.72);
+}
+
+.trace-empty {
+  padding: 16px;
+  color: var(--text-muted);
+}
+
+.trace-step {
+  padding: 14px 16px;
+}
+
+.trace-step[data-model='vision'] {
+  border-color: rgba(243, 139, 49, 0.26);
+}
+
+.trace-step[data-model='rewrite'] {
+  border-color: rgba(125, 207, 149, 0.2);
+}
+
+.trace-step[data-within-target='true'] {
+  box-shadow: inset 0 0 0 1px rgba(125, 207, 149, 0.22);
+}
+
+.trace-step-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+
+.trace-step-heading {
+  min-width: 0;
+}
+
+.trace-step-title,
+.trace-step-model,
+.trace-step-meta {
+  margin: 0;
+}
+
+.trace-step-title {
+  font-weight: 600;
+  color: #f6f3ea;
+}
+
+.trace-step-model {
+  margin-top: 2px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.trace-step-meta {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.trace-step-body {
+  margin: 12px 0 0;
+  white-space: pre-wrap;
+  font-family: 'IBM Plex Mono', 'SFMono-Regular', monospace;
+  font-size: 0.92rem;
+  color: #f3f1ec;
+}
+
+.error-card {
+  border-color: rgba(255, 131, 112, 0.28);
+  background: rgba(74, 24, 23, 0.32);
+}
+
+.error-text {
+  margin: 12px 0 0;
+  color: var(--danger);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
