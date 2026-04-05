@@ -19,14 +19,14 @@ let model: Awaited<ReturnType<typeof AutoModelForImageTextToText.from_pretrained
 let loadPromise: Promise<void> | null = null;
 let activeBackend: RuntimeBackend = 'unknown';
 
-interface NavigatorWithGpu extends Navigator {
+type NavigatorWithGpu = Navigator & {
   gpu: {
     requestAdapter(options?: {
       powerPreference?: 'low-power' | 'high-performance';
       forceFallbackAdapter?: boolean;
     }): Promise<unknown>;
   };
-}
+};
 
 function isExecutionBackend(backend: RuntimeBackend): backend is 'webgpu' | 'wasm' {
   return backend === 'webgpu' || backend === 'wasm';
