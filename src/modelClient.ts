@@ -89,9 +89,7 @@ function getLoadErrorMessage(error: unknown, backend: RuntimeBackend): string {
 
 function buildAltTextPrompt(): string {
   return [
-    'Generate useful alt text for this image.',
-    'Describe the image clearly in one concise sentence that would work well in an image alt attribute.',
-    'Do not mention that this is an alt text.',
+    'Describe the image clearly in one concise sentence.',
     'Do not use bullet points, JSON, or markdown.',
   ].join('\n');
 }
@@ -173,23 +171,21 @@ function buildRewriteMessages(currentText: string, iteration: number): Chat {
     {
       role: 'system',
       content: [
-        'You shorten image descriptions into concise HTML alt text.',
+        'You shorten image descriptions into concise words.',
         'Your top priority is making the text shorter.',
-        'It is okay to drop detail aggressively.',
-        'Return only the rewritten alt text with no prefatory text.',
+        'Return only the rewritten descriptions with no prefatory text.',
+        'Do not add thought process or reasoning steps, as this will make the output too long.',
       ].join(' '),
     },
     {
       role: 'user',
       content: [
         iteration === 1
-          ? 'Rewrite this image description as concise HTML alt text.'
+          ? 'Rewrite this image description as concise words.'
           : 'This alt text is still too long. Shorten it further.',
-        `Target ${ALT_TEXT_CHARACTER_LIMIT} characters or fewer. Prefer a few words when possible.`,
+        `Target ${ALT_TEXT_CHARACTER_LIMIT} characters or fewer.`,
         `Current length: ${currentText.length} characters.`,
-        'Shorten aggressively.',
-        'Do not add new details.',
-        'Return only the rewritten alt text.',
+        'Return only the rewritten descriptions.',
         '',
         `Current text: ${currentText}`,
       ].join('\n'),
