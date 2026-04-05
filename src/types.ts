@@ -13,12 +13,27 @@ export interface RuntimeAvailability {
   reason?: string;
 }
 
+export interface GenerationTraceStep {
+  id: string;
+  model: 'vision' | 'rewrite';
+  label: string;
+  text: string;
+  charCount: number;
+}
+
+export interface GenerationProgressUpdate {
+  status: string;
+  steps: GenerationTraceStep[];
+}
+
 export interface ImageQuestionInput {
   image: File;
   prompt: string;
+  onProgress?: (update: GenerationProgressUpdate) => void;
 }
 
 export interface ImageQuestionResult {
   text: string;
   backend: string;
+  steps: GenerationTraceStep[];
 }
