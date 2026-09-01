@@ -1,5 +1,7 @@
 # Image Alt Text Generator
 
+**DEMO link: https://summerwang.dev/in-browser-multimodel-llm-alt-text-generator/**
+
 An in-browser image-to-text demo built with Vite, TypeScript, and `@huggingface/transformers`.
 
 The app lets a user upload one image and generate a short alt-text sentence locally in the browser with a two-stage pipeline:
